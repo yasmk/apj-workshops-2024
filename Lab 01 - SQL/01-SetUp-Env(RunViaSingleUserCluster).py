@@ -20,8 +20,6 @@ if reset:
 spark.sql(f'CREATE DATABASE IF NOT EXISTS {database_name};')
 spark.sql(f'USE {database_name}')
 
-# copy sample data from git
-
 # COMMAND ----------
 
 working_dir = '/'.join(os.getcwd().split('/')[0:5])
