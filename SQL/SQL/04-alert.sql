@@ -3,7 +3,7 @@
 get your databse name by running the first cell of the prep-notebook 
 */
 --------------------
-USE your_database_name;
+USE <<catalog>>.<<databasename>>;;
 --------------------
 
 -- use this to set up the alert
