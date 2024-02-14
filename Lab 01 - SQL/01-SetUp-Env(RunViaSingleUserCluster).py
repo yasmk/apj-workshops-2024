@@ -7,6 +7,8 @@ datasets_location = f'/FileStore/tmp/{current_user_id}/datasets/'
 catalog = 'apjworkshop24'
 database_name = current_user_id.split('@')[0].replace('.','_')
 
+spark.sql(f'GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`')
+spark.sql(f'GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`')
 
 # create catalog
 spark.sql(f'CREATE CATALOG IF NOT EXISTS {catalog};')
