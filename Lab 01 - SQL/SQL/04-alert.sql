@@ -1,6 +1,6 @@
 --------------------
 /* replace your_database_name in the following command by your database name 
-get your databse name by running the first cell of the prep-notebook 
+get your database name by running the first cell of the prep-notebook 
 */
 --------------------
 USE <<catalog>>.<<databasename>>;;
@@ -8,7 +8,7 @@ USE <<catalog>>.<<databasename>>;;
 
 -- use this to set up the alert
 SELECT store_id, count(*) as cnt FROM fact_apj_sales 
-where order_state = 'CANCELLED'
+where order_state = 'CANCELED'
 group by store_id
 
 -- then insert new rows to trigger the alert
