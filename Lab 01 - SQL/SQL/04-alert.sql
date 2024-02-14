@@ -7,9 +7,9 @@ USE <<catalog>>.<<databasename>>;;
 --------------------
 
 -- use this to set up the alert
-SELECT store_name, cnt AS canceled_per_store
-FROM vw_order_by_city WHERE order_state=="CANCELED";
-
+SELECT store_id, count(*) as cnt FROM fact_apj_sales 
+where order_state = 'CANCELLED'
+group by store_id
 
 -- then insert new rows to trigger the alert
 
