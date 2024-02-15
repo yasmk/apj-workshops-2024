@@ -9,12 +9,12 @@ datasets_location = f"/FileStore/tmp/{current_user_id}/datasets/"
 catalog = "apjworkshop24"
 database_name = current_user_id.split("@")[0].replace(".", "_")
 
-spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
-spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
-
 # create catalog
 spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog};")
+spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
+spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
 spark.sql(f"USE CATALOG {catalog};")
+
 if reset:
     dbutils.fs.rm(datasets_location, True)
     spark.sql(f"DROP DATABASE IF EXISTS {database_name} CASCADE")
@@ -30,9 +30,9 @@ working_dir = "/".join(os.getcwd().split("/")[0:5])
 git_datasets_location = f"{working_dir}/Datasets/SQL Lab"
 
 sample_datasets = [
-    "dim_products",
-    "fact_apj_sale_items",
+    "dim_customer",
     "dim_locations",
+    "fact_apj_sale_items",
     "fact_apj_sales",
 ]
 for sample_data in sample_datasets:
