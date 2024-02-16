@@ -32,6 +32,7 @@ git_datasets_location = f"{working_dir}/Datasets/SQL Lab"
 sample_datasets = [
     "dim_customer",
     "dim_locations",
+    "dim_products",
     "fact_apj_sale_items",
     "fact_apj_sales",
 ]
@@ -59,7 +60,7 @@ print(f"Use this catalog.database name through out the lab: {catalog}.{database_
 
 # COMMAND ----------
 
-table_name = "dim_products"
+table_name = "dim_customers"
 sample_file = f"{table_name}.csv.gz"
 spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
 spark.conf.set("table.name", table_name)
@@ -86,6 +87,32 @@ spark.conf.set("table.name", table_name)
 # COMMAND ----------
 
 table_name = "dim_locations"
+sample_file = f"{table_name}.csv.gz"
+spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
+spark.conf.set("table.name", table_name)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS `${table.name}`;
+# MAGIC
+# MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
+# MAGIC
+# MAGIC COPY INTO `${table.name}` FROM
+# MAGIC (SELECT *
+# MAGIC FROM  '${sampledata.path}')
+# MAGIC FILEFORMAT = CSV
+# MAGIC FORMAT_OPTIONS ('mergeSchema' = 'true',
+# MAGIC                 'delimiter' = ',',
+# MAGIC                 'header' = 'true',
+# MAGIC                 'quote'="'")
+# MAGIC COPY_OPTIONS ('mergeSchema' = 'true');
+# MAGIC
+# MAGIC SELECT * FROM `${table.name}`;
+
+# COMMAND ----------
+
+table_name = "dim_products"
 sample_file = f"{table_name}.csv.gz"
 spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
 spark.conf.set("table.name", table_name)
