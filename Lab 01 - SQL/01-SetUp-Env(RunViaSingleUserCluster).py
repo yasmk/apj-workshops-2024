@@ -60,7 +60,7 @@ print(f"Use this catalog.database name through out the lab: {catalog}.{database_
 
 # COMMAND ----------
 
-table_name = "dim_customers"
+table_name = "dim_customer"
 sample_file = f"{table_name}.csv.gz"
 spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
 spark.conf.set("table.name", table_name)
