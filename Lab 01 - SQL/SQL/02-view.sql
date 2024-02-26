@@ -6,49 +6,37 @@ get your databse name by running the first cell of the prep-notebook
 USE <<catalog>>.<<databasename>>;;
 --------------------
 
-SELECT
-  a.store_id,
-  a.order_source,
-  a.order_state,
-  b.city,
-  b.country_code,
-  b.name AS store_name,
-  count(*) AS cnt
-FROM
-  fact_apj_sales a
-  JOIN dim_store_locations b ON a.slocation_skey = b.slocation_skey
-GROUP BY
-  a.store_id,
-  a.order_source,
-  a.order_state,
-  b.city,
-  b.country_code,
-  b.name
+select
+  sales.ts::timestamp as date,
+  sales.store_id,
+  sales.sale_id,
+  items.product_cost as cost,
+  locations.city
+from
+ fact_apj_sales sales
+  join fact_apj_sale_items items 
+       on items.sale_id = sales.sale_id
+  join dim_locations locations
+       on sales.store_id = locations.id;
 
 
 -- CREATE a VIEW
 
-CREATE VIEW IF NOT EXISTS vw_order_by_city
+CREATE VIEW IF NOT EXISTS vw_sales_cost_location
 AS
-SELECT
-  a.store_id,
-  a.order_source,
-  a.order_state,
-  b.city,
-  b.country_code,
-  b.name AS store_name,
-  count(*) AS cnt
-FROM
-  fact_apj_sales a
-  JOIN dim_store_locations b ON a.slocation_skey = b.slocation_skey
-GROUP BY
-  a.store_id,
-  a.order_source,
-  a.order_state,
-  b.city,
-  b.country_code,
-  b.name
+select
+  sales.ts::timestamp as date,
+  sales.store_id,
+  sales.sale_id,
+  items.product_cost as cost,
+  locations.city
+from
+ fact_apj_sales sales
+  join fact_apj_sale_items items 
+       on items.sale_id = sales.sale_id
+  join dim_locations locations
+       on sales.store_id = locations.id
 ;
   
-SELECT * FROM vw_order_by_city
+SELECT * FROM vw_sales_cost_location
 
