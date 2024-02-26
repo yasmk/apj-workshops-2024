@@ -34,6 +34,10 @@ SELECT * FROM fact_apj_sales ORDER BY ts DESC; -- most recent version
 
 DESCRIBE HISTORY fact_apj_sales;
 
+RESTORE TABLE fact_apj_sales  TO VERSION AS OF 1;
+
+DESCRIBE HISTORY fact_apj_sales;
+
 SELECT * FROM fact_apj_sales VERSION AS OF 1 ORDER BY ts DESC; -- data before new row inserted
 
 
