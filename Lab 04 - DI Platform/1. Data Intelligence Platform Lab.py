@@ -22,12 +22,8 @@
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC ## 0. Setup Script
-# MAGIC Run the below cell to setup your lab environment
-
-# COMMAND ----------
-
-# MAGIC %run "../Lab 01 - SQL/01-SetUp-Env(RunViaSingleUserCluster)"
+# MAGIC ## 0. Lab Setup
+# MAGIC Run the `0. Lab 04 Setup` notebook to setup the lab environment
 
 # COMMAND ----------
 
