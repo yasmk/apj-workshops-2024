@@ -50,7 +50,7 @@
 
 # MAGIC %md
 # MAGIC ## 2. Add Comments and Discover Data
-# MAGIC Add some comments to the `product_description` table that will help othres find it, using the AI suggested comments to help out. Test out serching for this table using the search pane at the top of the screen.
+# MAGIC Add some comments to the `product_description` table that will help others find it, using the AI suggested comments to help out. Test out searching for this table using the "search data" bar at the top of the screen.
 
 # COMMAND ----------
 
