@@ -21,17 +21,27 @@
 
 # COMMAND ----------
 
+# MAGIC %md 
+# MAGIC ## 0. Setup Script
+# MAGIC Run the below cell to setup your lab environment
+
+# COMMAND ----------
+
+# MAGIC %run "../Lab 01 - SQL/01-SetUp-Env(RunViaSingleUserCluster)"
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ## 1. Upload a File to Unity Catalog Volume - BYO Data - and create a new table
 # MAGIC
 # MAGIC
-# MAGIC 1. Download the file `https://github.com/yasmk/apj-workshops-2024/blob/main/Datasets/DI%20Platform%20Lab/product_descriptions.tsv` to your local computer <br />
+# MAGIC 1. Download the [Product Descriptions](https://github.com/yasmk/apj-workshops-2024/blob/main/Datasets/DI%20Platform%20Lab/product_description.tsv) file to your local computer <br />
 # MAGIC 2. Navigate to the `Catalog Explorer` and find the `byo_data` volume under your catalog and schema
-# MAGIC <br /><img style="float:right" src="https://raw.githubusercontent.com/yasmk/apj-workshops-2024/feature/di-platform-lab1/Resources/Screenshots/1.2.png"/><br />
+# MAGIC <br /><img style="float:right" src="https://github.com/yasmk/apj-workshops-2024/blob/main/Resources/Screenshots/1.2.png?raw=true"/><br />
 # MAGIC 3. Click on the volume name and then click on `"Upload to this volume"` button on the top right corner<br />
 # MAGIC 4. Select the `product_descriptions.tsv` from your local computer and upload to the volume<br />
 # MAGIC 5. After the upload completes, click on the 3 dot button (vertical elipsis) on the far right side of the file name and select `create table`
-# MAGIC <br /><img style="float:right" src="https://raw.githubusercontent.com/yasmk/apj-workshops-2024/feature/di-platform-lab1/Resources/Screenshots/1.5.png"/><br />
+# MAGIC <br /><img style="float:right" src="https://github.com/yasmk/apj-workshops-2024/blob/main/Resources/Screenshots/1.5.png?raw=true"/><br />
 # MAGIC 6. Leave the `create new table` option selected, then select the correct catalog and schema names from the drop down. Keep the table name as `product_description`<br />
 # MAGIC 7. Examine the available data, then click `create table`<br />
 # MAGIC 8. Once the table creation is complete, click on the `Sample Data` tab in the `Catalog Explorer` to see if the data was loaded correctly and is displayed as expected. <br />
