@@ -31,11 +31,11 @@
 # MAGIC ## 1. Upload a File to Unity Catalog Volume - BYO Data - and create a new table
 # MAGIC
 # MAGIC
-# MAGIC 1. Download the [Product Descriptions](https://github.com/yasmk/apj-workshops-2024/blob/main/Datasets/DI%20Platform%20Lab/product_description.tsv) file to your local computer <br />
+# MAGIC 1. Download the [Product Description](https://github.com/yasmk/apj-workshops-2024/blob/main/Datasets/DI%20Platform%20Lab/product_description.tsv) file to your local computer <br />
 # MAGIC 2. Navigate to the `Catalog Explorer` and find the `byo_data` volume under your catalog and schema
 # MAGIC <br /><img style="float:right" src="https://github.com/yasmk/apj-workshops-2024/blob/main/Resources/Screenshots/1.2.png?raw=true"/><br />
 # MAGIC 3. Click on the volume name and then click on `"Upload to this volume"` button on the top right corner<br />
-# MAGIC 4. Select the `product_descriptions.tsv` from your local computer and upload to the volume<br />
+# MAGIC 4. Select the `product_description.tsv` from your local computer and upload to the volume<br />
 # MAGIC 5. After the upload completes, click on the 3 dot button (vertical elipsis) on the far right side of the file name and select `create table`
 # MAGIC <br /><img style="float:right" src="https://github.com/yasmk/apj-workshops-2024/blob/main/Resources/Screenshots/1.5.png?raw=true"/><br />
 # MAGIC 6. Leave the `create new table` option selected, then select the correct catalog and schema names from the drop down. Keep the table name as `product_description`<br />
@@ -50,7 +50,7 @@
 
 # MAGIC %md
 # MAGIC ## 2. Add Comments and Discover Data
-# MAGIC Add some comments to the `product_descriptions` table that will help othres find it, using the AI suggested comments to help out. Test out serching for this table using the search pane at the top of the screen.
+# MAGIC Add some comments to the `product_description` table that will help othres find it, using the AI suggested comments to help out. Test out serching for this table using the search pane at the top of the screen.
 
 # COMMAND ----------
 
@@ -59,7 +59,7 @@
 # MAGIC
 # MAGIC 1. Open the `SQL Editor` on the Databricks Workspace menu and create a new query tab<br /><br />
 # MAGIC 2. Select the correct catalog and schema at the top drop down menu<br /><br />
-# MAGIC 3. Click on the Databricks Assistant icon on the left hand side of the SQL Editor window and type the prompt: `How can I join the tables dim_products and product_description to add descriptions to my products?`<br />
+# MAGIC 3. Click on the Databricks Assistant icon on the left hand side of the SQL Editor window and type the prompt: **How can I join the tables dim_products and product_description to add descriptions to my products?**<br />
 # MAGIC As the Databricks Assistant can provide different results every time you aske the same question, go ahead and do a few more prompt iterations to get to a usable query, if necessary. If the Assistant can give you an `INNER JOIN` query where you can replace the column names, go ahead and adjust accordingly: <br /><br />
 # MAGIC
 # MAGIC The final query should be similar to this:
