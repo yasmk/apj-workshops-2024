@@ -49,7 +49,13 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 2. Ask Databricks Assistant to help you write a join between new and existing data
+# MAGIC ## 2. Add Comments and Discover Data
+# MAGIC Add some comments to the `product_descriptions` table that will help othres find it, using the AI suggested comments to help out. Test out serching for this table using the search pane at the top of the screen.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## 3. Ask Databricks Assistant to help you write a join between new and existing data
 # MAGIC
 # MAGIC 1. Open the `SQL Editor` on the Databricks Workspace menu and create a new query tab<br /><br />
 # MAGIC 2. Select the correct catalog and schema at the top drop down menu<br /><br />
@@ -60,8 +66,8 @@
 # MAGIC
 # MAGIC ```
 # MAGIC SELECT p.*, pd.prod_desc
-# MAGIC FROM apjworkshop24.will_scalioni.dim_products AS p
-# MAGIC JOIN apjworkshop24.will_scalioni.product_description AS pd ON p.name = pd.prod_name
+# MAGIC FROM apjworkshop24.<my_schema>.dim_products AS p
+# MAGIC JOIN apjworkshop24.<my_schema>.product_description AS pd ON p.name = pd.prod_name
 # MAGIC ```
 # MAGIC
 # MAGIC 4. Click on the `Save*` button at the top of the SQL Editor, name the query `Products with full Description`, and save it to your Workspace
@@ -69,60 +75,11 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 3. Ask Databricks Assistant to help with creating a Silver Table
+# MAGIC ## 4. Use the Assistant to Build a Silver and Gold Table
 # MAGIC
-# MAGIC 1. Create a new Notebook and set the default language to SQL
-# MAGIC 2. You can ask the assistant to help you build a query to identify the top completed orders (highest to lowest order total in dollars) by leveraging the inline assistant within the notebook cell. Or you can use the query below. Make sure you update the catalog and schema name accordingly. 
+# MAGIC Open the `2.1 Data Prep - Silver` notebook and follow the instructions to create a silver table.
 # MAGIC
-# MAGIC ```
-# MAGIC select 
-# MAGIC     a.ts,
-# MAGIC     a.sale_id,
-# MAGIC     a.order_source,
-# MAGIC     a.order_state,
-# MAGIC     a.unique_customer_id,
-# MAGIC     a.customer_skey,
-# MAGIC     a.store_id,
-# MAGIC     a.slocation_skey,
-# MAGIC     sum(b.product_cost) order_total
-# MAGIC from `apjworkshop24`.`will_scalioni`.`fact_apj_sales` a 
-# MAGIC     inner join `apjworkshop24`.`will_scalioni`.`fact_apj_sale_items` b
-# MAGIC     on a.sale_id = b.sale_id
-# MAGIC where 
-# MAGIC     a.order_state = 'COMPLETED'
-# MAGIC group by
-# MAGIC     all
-# MAGIC order by 
-# MAGIC     order_total desc;
-# MAGIC ```
-# MAGIC
-# MAGIC 3. Edit the query and _create or replace_ a Silver table to persist the results in the Lakehouse as a Delta Table. Name the new table `top_orders_silver`. Make sure you create it in the correct catalog and schema. 
-# MAGIC
-# MAGIC 4. Add a new cell to the notebook and run a `select * from` the new table so you can check the results in the same notebook. 
-# MAGIC
-# MAGIC 5. Rename the Notebook to `01 - Data Preparation Silver`
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ## 4. Ask Databricks Assistant to help with creating a Gold Table
-# MAGIC
-# MAGIC 1. Create a new Notebook and set the default language to SQL
-# MAGIC 2. You can ask the assistant to help you build a query to aggregate the total sales by store and date, by leveraging the inline assistant within the notebook cell. Or you can use the query below. Make sure you update the catalog and schema name accordingly.
-# MAGIC
-# MAGIC ```
-# MAGIC select  
-# MAGIC     date(ts) as order_date,
-# MAGIC     store_id,
-# MAGIC     sum(order_total) total_sales_by_store
-# MAGIC from 
-# MAGIC     `apjworkshop24`.`will_scalioni`.`top_orders_silver` 
-# MAGIC group by all
-# MAGIC ```
-# MAGIC
-# MAGIC 3. Edit the query and create or replace a Gold table to persist the results in the Lakehouse as a Delta Table. Name the new table `top_stores_gold`. Make sure you create it in the correct catalog and schema.
-# MAGIC
-# MAGIC 3. Rename the Notebook to `02 - Data Preparation Gold`
+# MAGIC Similarity, open the `2.2 Data Prep - Gold` notebook and follow the instructions to create a gold table.
 
 # COMMAND ----------
 
@@ -135,7 +92,7 @@
 # MAGIC - Task Name `Data_Preparation_Silver` 
 # MAGIC - Type: Notebook
 # MAGIC - Source: Workspace
-# MAGIC - Path: navigate and select the `01 - Data Preparation Silver` notebook 
+# MAGIC - Path: navigate and select the `2.1 Data Prep - Silver` notebook 
 # MAGIC - Compute: select the DBSQL Serverless cluster
 # MAGIC - Click `Create Task`
 # MAGIC
@@ -143,12 +100,13 @@
 # MAGIC - Task name: `Status Check`
 # MAGIC - Condition: Click on the link `Browse dynamic values` and copy ``{{tasks.[task_name].result_state}}``
 # MAGIC - Replace the task name accordingly replacing the placeholder with the correct previous task name: `{{tasks.Data_Preparation_Silver.result_state}}`
+# MAGIC - Enter `success` as the condition value
 # MAGIC
 # MAGIC 5. Add a third task to the Workflow and configure it as follows:
 # MAGIC - Task Name `Data_Preparation_Gold` 
 # MAGIC - Type: Notebook
 # MAGIC - Source: Workspace
-# MAGIC - Path: navigate and select the `02 - Data Preparation Gold` notebook 
+# MAGIC - Path: navigate and select the `2.2 Data Prep - Gold` notebook 
 # MAGIC - Compute: select the DBSQL Serverless cluster
 # MAGIC - Click `Create Task`
 # MAGIC
@@ -159,7 +117,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 6. Create a Lakeview report based on the new dataset
+# MAGIC ## 7. Create a Lakeview report based on the new dataset
 # MAGIC
 # MAGIC 1. Open the Dashboards from the left menu and click on the Lakeview Dashboards tab
 # MAGIC 2. Click on `Create Lakeview Dashboard` button on the top right corner

@@ -11,10 +11,9 @@ database_name = current_user_id.split("@")[0].replace(".", "_")
 
 # create catalog
 spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog};")
-spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
-spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
+
 spark.sql(f"USE CATALOG {catalog};")
-spark.sql(f"CREATE VOLUME byo_data")
+
 
 if reset:
     dbutils.fs.rm(datasets_location, True)
@@ -23,7 +22,12 @@ if reset:
 
 # create database
 spark.sql(f"CREATE DATABASE IF NOT EXISTS {database_name};")
+spark.sql(f"GRANT ALL PRIVILEGES ON DATABASE {database_name} to `{current_user_id}`")
+
 spark.sql(f"USE {database_name}")
+
+# create volume
+spark.sql(f"CREATE VOLUME IF NOT EXISTS byo_data")
 
 # COMMAND ----------
 
