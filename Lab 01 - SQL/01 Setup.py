@@ -6,21 +6,21 @@ current_user_id = (
     dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
 )
 datasets_location = f"/FileStore/tmp/{current_user_id}/datasets/"
-catalog = "apjworkshop24"
+catalog = "workshop"
 database_name = current_user_id.split("@")[0].replace(".", "_")
 
-# create catalog
+# if reset:
+#     dbutils.fs.rm(datasets_location, True)
+#     spark.sql(f"DROP DATABASE IF EXISTS {database_name} CASCADE")
+#     spark.sql(f"DROP CATALOG IF EXISTS {catalog} CASCADE")
+
+# Create catalog
 spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog};")
 spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
 spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
 spark.sql(f"USE CATALOG {catalog};")
 
-if reset:
-    dbutils.fs.rm(datasets_location, True)
-    spark.sql(f"DROP DATABASE IF EXISTS {database_name} CASCADE")
-
-
-# create database
+# Create database
 spark.sql(f"CREATE DATABASE IF NOT EXISTS {database_name};")
 spark.sql(f"USE {database_name}")
 
@@ -69,20 +69,25 @@ spark.conf.set("table.name", table_name)
 
 # MAGIC %sql
 # MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC
 # MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
 # MAGIC
-# MAGIC COPY INTO `${table.name}` FROM
-# MAGIC (SELECT *
-# MAGIC FROM  '${sampledata.path}')
-# MAGIC FILEFORMAT = CSV
-# MAGIC FORMAT_OPTIONS ('mergeSchema' = 'true',
-# MAGIC                 'delimiter' = ',',
-# MAGIC                 'header' = 'true',
-# MAGIC                 'quote'="'")
-# MAGIC COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC
-# MAGIC SELECT * FROM `${table.name}`;
+# MAGIC COPY INTO `${table.name}`
+# MAGIC FROM
+# MAGIC   (
+# MAGIC     SELECT
+# MAGIC       *
+# MAGIC     FROM
+# MAGIC       '${sampledata.path}'
+# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
+# MAGIC     'mergeSchema' = 'true',
+# MAGIC     'delimiter' = ',',
+# MAGIC     'header' = 'true',
+# MAGIC     'quote' = "'"
+# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
+# MAGIC SELECT
+# MAGIC   *
+# MAGIC FROM
+# MAGIC   `${table.name}`;
 
 # COMMAND ----------
 
@@ -95,20 +100,25 @@ spark.conf.set("table.name", table_name)
 
 # MAGIC %sql
 # MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC
 # MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
 # MAGIC
-# MAGIC COPY INTO `${table.name}` FROM
-# MAGIC (SELECT *
-# MAGIC FROM  '${sampledata.path}')
-# MAGIC FILEFORMAT = CSV
-# MAGIC FORMAT_OPTIONS ('mergeSchema' = 'true',
-# MAGIC                 'delimiter' = ',',
-# MAGIC                 'header' = 'true',
-# MAGIC                 'quote'="'")
-# MAGIC COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC
-# MAGIC SELECT * FROM `${table.name}`;
+# MAGIC COPY INTO `${table.name}`
+# MAGIC FROM
+# MAGIC   (
+# MAGIC     SELECT
+# MAGIC       *
+# MAGIC     FROM
+# MAGIC       '${sampledata.path}'
+# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
+# MAGIC     'mergeSchema' = 'true',
+# MAGIC     'delimiter' = ',',
+# MAGIC     'header' = 'true',
+# MAGIC     'quote' = "'"
+# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
+# MAGIC SELECT
+# MAGIC   *
+# MAGIC FROM
+# MAGIC   `${table.name}`;
 
 # COMMAND ----------
 
@@ -121,20 +131,25 @@ spark.conf.set("table.name", table_name)
 
 # MAGIC %sql
 # MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC
 # MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
 # MAGIC
-# MAGIC COPY INTO `${table.name}` FROM
-# MAGIC (SELECT *
-# MAGIC FROM  '${sampledata.path}')
-# MAGIC FILEFORMAT = CSV
-# MAGIC FORMAT_OPTIONS ('mergeSchema' = 'true',
-# MAGIC                 'delimiter' = ',',
-# MAGIC                 'header' = 'true',
-# MAGIC                 'quote'="'")
-# MAGIC COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC
-# MAGIC SELECT * FROM `${table.name}`;
+# MAGIC COPY INTO `${table.name}`
+# MAGIC FROM
+# MAGIC   (
+# MAGIC     SELECT
+# MAGIC       *
+# MAGIC     FROM
+# MAGIC       '${sampledata.path}'
+# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
+# MAGIC     'mergeSchema' = 'true',
+# MAGIC     'delimiter' = ',',
+# MAGIC     'header' = 'true',
+# MAGIC     'quote' = "'"
+# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
+# MAGIC SELECT
+# MAGIC   *
+# MAGIC FROM
+# MAGIC   `${table.name}`;
 
 # COMMAND ----------
 
@@ -147,20 +162,25 @@ spark.conf.set("table.name", table_name)
 
 # MAGIC %sql
 # MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC
 # MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
 # MAGIC
-# MAGIC COPY INTO `${table.name}` FROM
-# MAGIC (SELECT *
-# MAGIC FROM  '${sampledata.path}')
-# MAGIC FILEFORMAT = CSV
-# MAGIC FORMAT_OPTIONS ('mergeSchema' = 'true',
-# MAGIC                 'delimiter' = ',',
-# MAGIC                 'header' = 'true',
-# MAGIC                 'quote'="'")
-# MAGIC COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC
-# MAGIC SELECT * FROM `${table.name}`;
+# MAGIC COPY INTO `${table.name}`
+# MAGIC FROM
+# MAGIC   (
+# MAGIC     SELECT
+# MAGIC       *
+# MAGIC     FROM
+# MAGIC       '${sampledata.path}'
+# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
+# MAGIC     'mergeSchema' = 'true',
+# MAGIC     'delimiter' = ',',
+# MAGIC     'header' = 'true',
+# MAGIC     'quote' = "'"
+# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
+# MAGIC SELECT
+# MAGIC   *
+# MAGIC FROM
+# MAGIC   `${table.name}`;
 
 # COMMAND ----------
 
@@ -173,29 +193,35 @@ spark.conf.set("table.name", table_name)
 
 # MAGIC %sql
 # MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC
 # MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
 # MAGIC
-# MAGIC COPY INTO `${table.name}` FROM
-# MAGIC (SELECT *
-# MAGIC FROM  '${sampledata.path}')
-# MAGIC FILEFORMAT = CSV
-# MAGIC FORMAT_OPTIONS ('mergeSchema' = 'true',
-# MAGIC                 'delimiter' = ',',
-# MAGIC                 'header' = 'true',
-# MAGIC                 'quote'="'")
-# MAGIC COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC
-# MAGIC SELECT * FROM `${table.name}`;
+# MAGIC COPY INTO `${table.name}`
+# MAGIC FROM
+# MAGIC   (
+# MAGIC     SELECT
+# MAGIC       *
+# MAGIC     FROM
+# MAGIC       '${sampledata.path}'
+# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
+# MAGIC     'mergeSchema' = 'true',
+# MAGIC     'delimiter' = ',',
+# MAGIC     'header' = 'true',
+# MAGIC     'quote' = "'"
+# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
+# MAGIC SELECT
+# MAGIC   *
+# MAGIC FROM
+# MAGIC   `${table.name}`;
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC /*store_data, json*/
-# MAGIC CREATE OR REPLACE TABLE store_data_json
-# MAGIC AS SELECT
-# MAGIC 1 AS id,
-# MAGIC '{
+# MAGIC CREATE
+# MAGIC OR REPLACE TABLE store_data_json AS
+# MAGIC SELECT
+# MAGIC   1 AS id,
+# MAGIC   '{
 # MAGIC    "store":{
 # MAGIC       "fruit": [
 # MAGIC         {"weight":8,"type":"apple"},
@@ -241,9 +267,10 @@ spark.conf.set("table.name", table_name)
 # MAGIC     "zip code":"94025",
 # MAGIC     "fb:testid":"1234"
 # MAGIC  }' as raw;
-# MAGIC
-# MAGIC SELECT * FROM store_data_json;
-# MAGIC
+# MAGIC SELECT
+# MAGIC   *
+# MAGIC FROM
+# MAGIC   store_data_json;
 
 # COMMAND ----------
 

@@ -24,4 +24,3 @@ SELECT raw:store.fruit[0], raw:store.fruit[1] FROM store_data_json;
 
 -- Extract subfields from arrays
 SELECT raw:store.book[*].isbn FROM store_data_json;
-

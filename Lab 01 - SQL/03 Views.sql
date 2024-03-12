@@ -35,5 +35,5 @@ FROM
   
 
 -- Select all reocrds from the view
-SELECT * FROM vw_sales_cost_location
+SELECT * FROM vw_sales_cost_location;
 

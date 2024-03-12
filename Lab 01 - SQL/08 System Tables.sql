@@ -88,4 +88,3 @@ WHERE
   AND service_name = "unityCatalog"
   AND action_name = "generateTemporaryTableCredential"
   AND datediff(now(), event_time) < 1;
-
