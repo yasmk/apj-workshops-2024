@@ -10,7 +10,7 @@ SELECT
   sales.sale_id,
   items.product_cost::double as cost,
   locations.city
-from
+FROM
  fact_apj_sales sales
   JOIN fact_apj_sale_items items 
        ON items.sale_id = sales.sale_id

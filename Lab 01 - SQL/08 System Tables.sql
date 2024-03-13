@@ -14,7 +14,7 @@ SELECT * FROM system.access.table_lineage limit 10;
 
 
 -- Select spend over time per month for each account, workspace, and SKU
-select
+SELECT
   u.account_id,
   u.workspace_id,
   u.sku_name,
@@ -28,16 +28,16 @@ select
   lp.pricing.default as list_price,
   lp.pricing.default * u.usage_quantity as list_cost,
   u.usage_metadata.*
-from
+FROM
   system.billing.usage u
-  inner join system.billing.list_prices lp on u.cloud = lp.cloud
-  and u.sku_name = lp.sku_name
-  and u.usage_start_time >= lp.price_start_time
-  and (
+  JOIN system.billing.list_prices lp on u.cloud = lp.cloud
+  AND u.sku_name = lp.sku_name
+  AND u.usage_start_time >= lp.price_start_time
+  AND (
     u.usage_end_time <= lp.price_end_time
-    or lp.price_end_time is null
+    OR lp.price_end_time is null
   )
-where
+WHERE
   usage_metadata.job_id is not null;
 
 

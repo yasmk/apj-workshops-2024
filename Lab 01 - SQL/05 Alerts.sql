@@ -8,9 +8,9 @@ SELECT
   COUNT(*) as cnt
 FROM
   fact_apj_sales
-where
+WHERE
   order_state = 'CANCELED'
-group by
+GROUP BY
   store_id;
 
 
