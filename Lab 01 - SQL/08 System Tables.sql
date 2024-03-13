@@ -1,5 +1,5 @@
 -- Set your catalog and database.
-USE marat_levit.default;
+USE catalog.database;
 
 -- Select all billing data
 SELECT * FROM system.billing.usage limit 10;
