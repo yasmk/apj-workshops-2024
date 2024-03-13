@@ -1,6 +1,6 @@
 select
   sales.ts::timestamp as date,
-  items.product_cost as cost,
+  items.product_cost::double as cost,
   items.product_id as product,
   items.product_size,
   sales.sale_id,
