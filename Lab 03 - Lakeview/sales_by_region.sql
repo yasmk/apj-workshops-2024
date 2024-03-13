@@ -2,7 +2,7 @@ select
   sales.ts::timestamp as date,
   sales.store_id,
   sales.sale_id,
-  items.product_cost as cost,
+  items.product_cost::double as cost,
   locations.city
 from
   apjworkshop24.{username}.fact_apj_sales sales
