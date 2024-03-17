@@ -10,7 +10,7 @@
 # COMMAND ----------
 
 # We will create the following source Delta table.
-source_catalog = "gen-ai-catalog"
+source_catalog = 'gen_ai_catalog'
 source_schema = "lab_05"
 source_volume = "source_files"
 source_table = "arxiv_parse"

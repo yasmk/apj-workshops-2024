@@ -12,7 +12,7 @@ dbutils.library.restartPython()
 # COMMAND ----------
 
 # DBTITLE 1,Setup Params 
-db_catalog = 'gen-ai-catalog'
+db_catalog = 'gen_ai_catalog'
 db_schema = 'lab_05'
 db_table = "arxiv_parse"
 

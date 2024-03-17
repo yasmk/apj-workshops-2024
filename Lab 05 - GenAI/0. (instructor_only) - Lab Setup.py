@@ -1,16 +1,21 @@
 # Databricks notebook source
+# MAGIC %md
 # MAGIC # Setting up Training Lab
+# MAGIC
+# MAGIC This notebook is to be run by the instructor only to load documents and setup the lab utilities
 
 # COMMAND ----------
 
-# MAGIC $pip install --upgrade --force-reinstall databricks-vectorsearch
+# MAGIC # last tested with 0.23 of the databricks-vectorsearch client
+# MAGIC %pip install --upgrade --force-reinstall databricks-vectorsearch
+# MAGIC dbutils.library.restartPython()
 
 # COMMAND ----------
 
 # DBTITLE 1,Configuration Parameters
 vsc_endpoint_name = 'workshop-vs-endpoint'
 
-db_catalog = 'gen-ai-catalog'
+db_catalog = 'gen_ai_catalog'
 db_schema = 'lab_05'
 volume_name = 'source_files'
 
@@ -45,15 +50,15 @@ vsc.create_endpoint(
 # We will use UC Volumes for this
 
 spark.sql(f"CREATE CATALOG IF NOT EXISTS {db_catalog}")
-spark.sql(f"CREATE CATALOG IF NOT EXISTS {db_catalog}.{db_schema}")
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS {db_catalog}.{db_schema}")
 spark.sql(f"CREATE VOLUME IF NOT EXISTS {db_catalog}.{db_schema}.{volume_name}")
 
 volume_folder = f'/Volumes/{db_catalog}/{db_schema}/{volume_name}/'
-dbfs_volume_folder = f'/dbfs{volume_folder}'
 
 # COMMAND ----------
 import os
 import requests
+user_agent = "me-me-me"
 
 def load_file(file_uri, file_name, library_folder):
     
@@ -79,7 +84,7 @@ def load_file(file_uri, file_name, library_folder):
         print("Error occurred during the request:", e)
 
 for pdf in pdfs.keys():
-    load_file(pdfs[pdf], pdf, dbfs_volume_folder)
+    load_file(pdfs[pdf], pdf, volume_folder)
 
 
 
