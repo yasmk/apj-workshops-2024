@@ -6,6 +6,8 @@
 
 # MAGIC %md
 # MAGIC # Setting Up Databricks Vector Search
+# MAGIC
+# MAGIC We assume that the endpoint has been initiated already
 
 # COMMAND ----------
 

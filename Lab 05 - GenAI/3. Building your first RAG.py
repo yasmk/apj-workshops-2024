@@ -1,12 +1,11 @@
 # Databricks notebook source
-# MAGIC %md # Tabcorp bot chain
+# MAGIC %md # Building your first RAG
+# MAGIC 
+# MAGIC This is a notebook to create your first RAG Application
 
 # COMMAND ----------
 
 %pip install -U langchain==0.1.10 sqlalchemy==2.0.27 pypdf==4.1.0 mlflow==2.11.0 databricks-vectorsearch 
-
-# COMMAND ----------
-
 dbutils.library.restartPython()
 
 # COMMAND ----------
@@ -15,7 +14,6 @@ dbutils.library.restartPython()
 db_catalog = 'gen_ai_catalog'
 db_schema = 'lab_05'
 db_table = "arxiv_parse"
-
 
 endpoint_name = "workshop-vs-endpoint"
 vs_index = f"{db_table}_bge_index"
