@@ -9,8 +9,12 @@ CREATE OR REPLACE FUNCTION blue()
 SELECT blue();
 
 
+-- Show all user functions.
+SHOW USER FUNCTIONS;
+
+
 -- Create a UDF that encapsulates other functions.
-CREATE OR REPLACE FUNCTION to_hex(x INT )
+CREATE OR REPLACE FUNCTION to_hex(x INT)
   RETURN lpad(hex(least(greatest(0, x), 255)), 2, 0);
 
 SELECT to_hex(id) FROM range(2);
@@ -32,4 +36,3 @@ CREATE OR REPLACE FUNCTION from_rgb_scalar(rgb STRING)
 
 -- Select the names of the colours.
 SELECT from_rgb_scalar(rgb) FROM VALUES ('7DF9FF'), ('BFFF00') AS codes(rgb);
-

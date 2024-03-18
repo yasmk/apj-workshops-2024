@@ -19,11 +19,11 @@ DESCRIBE HISTORY fact_apj_sales;
 
 
 -- Display detailed information about the specified columns, 
--- including the column statistics collected by the command, and additional metadata information
+-- including the column statistics collected by the command, and additional metadata information.
 DESCRIBE EXTENDED fact_apj_sales;
 
 
--- Insert new records into the table
+-- Insert new records into the table.
 INSERT INTO
   fact_apj_sales (customer_skey, slocation_skey, sale_id, ts, order_source, order_state, unique_customer_id,store_id)
 VALUES
@@ -49,23 +49,19 @@ VALUES
   );
 
 
--- Return the number of records in the table
-SELECT COUNT(*) FROM fact_apj_sales;
-
-
--- Select all the records from the table ordered by the 'ts' column in descending order
-SELECT * FROM fact_apj_sales ORDER BY ts DESC;
-
-
+-- Return the history information showing the new inserts.
 DESCRIBE HISTORY fact_apj_sales;
+
+
+-- Return the number of records in the table.
+SELECT COUNT(*) FROM fact_apj_sales VERSION AS OF 1;
+
+SELECT COUNT(*) FROM fact_apj_sales VERSION AS OF 2;
 
 
 -- Restores a Delta table to an earlier state.
 RESTORE TABLE fact_apj_sales TO VERSION AS OF 1;
 
 
+-- Return history information showing the restore.
 DESCRIBE HISTORY fact_apj_sales;
-
-
--- Select all records from the table as of a particular table version
-SELECT * FROM fact_apj_sales VERSION AS OF 1 ORDER BY ts DESC;
