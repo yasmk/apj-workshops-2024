@@ -1,12 +1,8 @@
--- Set your catalog and database.
-USE catalog.database;
-
-
 -- Create a UDF that returns a literal.
-CREATE OR REPLACE FUNCTION blue()
+CREATE OR REPLACE FUNCTION catalog.database.blue()
   RETURN '0000FF';
   
-SELECT blue();
+SELECT catalog.database.blue();
 
 
 -- Show all user functions.
@@ -14,15 +10,16 @@ SHOW USER FUNCTIONS;
 
 
 -- Create a UDF that encapsulates other functions.
-CREATE OR REPLACE FUNCTION to_hex(x INT)
+CREATE OR REPLACE FUNCTION catalog.database.to_hex(x INT)
   RETURN lpad(hex(least(greatest(0, x), 255)), 2, 0);
 
-SELECT to_hex(id) FROM range(2);
+SELECT catalog.database.to_hex(id) FROM range(2);
 
 
 -- Create a lookup table.
-CREATE OR REPLACE TABLE colors(rgb STRING NOT NULL, name STRING NOT NULL);
-INSERT INTO colors VALUES
+CREATE OR REPLACE TABLE catalog.database.colors(rgb STRING NOT NULL, name STRING NOT NULL);
+
+INSERT INTO catalog.database.colors VALUES
   ('FF00FF', 'magenta'),
   ('FF0080', 'rose'),
   ('BFFF00', 'lime'),
@@ -30,9 +27,9 @@ INSERT INTO colors VALUES
 
 
 -- Create function to translate an RGB colour to its name.
-CREATE OR REPLACE FUNCTION from_rgb_scalar(rgb STRING)
-  RETURN SELECT FIRST(name) FROM colors WHERE colors.rgb = from_rgb_scalar.rgb;
+CREATE OR REPLACE FUNCTION catalog.database.from_rgb_scalar(rgb STRING)
+  RETURN SELECT FIRST(name) FROM catalog.database.colors WHERE colors.rgb = from_rgb_scalar.rgb;
 
 
 -- Select the names of the colours.
-SELECT from_rgb_scalar(rgb) FROM VALUES ('7DF9FF'), ('BFFF00') AS codes(rgb);
+SELECT catalog.database.from_rgb_scalar(rgb) FROM VALUES ('7DF9FF'), ('BFFF00') AS codes(rgb);

@@ -62,7 +62,7 @@ SELECT
 FROM
   system.operational_data.audit_logs
 WHERE
-  request_params.table_full_name = "<<catalog>>.<<schema>>.<<table>>"
+  request_params.table_full_name = "catalog.database.fact_apj_sales"
   AND service_name = "unityCatalog"
   AND action_name = "generateTemporaryTableCredential"
 GROUP BY
@@ -80,7 +80,7 @@ SELECT DISTINCT
 FROM
   system.access.audit
 WHERE
-  user_identity.email = "<<email>>"
+  user_identity.email = "email_address"
   AND service_name = "unityCatalog"
   AND action_name = "generateTemporaryTableCredential"
   AND datediff(now(), event_time) < 1

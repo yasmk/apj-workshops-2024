@@ -20,6 +20,32 @@ spark.sql(f"USE {database_name}")
 
 # COMMAND ----------
 
+import os
+
+
+def replace_in_files(directory, old_word, new_word):
+    for root, dirs, files in os.walk(directory):
+        for filename in files:
+            if filename.endswith(".sql"):
+                file_path = os.path.join(root, filename)
+                with open(file_path, "r", encoding="utf-8") as file:
+                    file_contents = file.read()
+
+                # Replace the target string
+                file_contents = file_contents.replace(old_word, new_word)
+
+                # Write the file out again
+                with open(file_path, "w", encoding="utf-8") as file:
+                    file.write(file_contents)
+                print(f"Updated file: {file_path}")
+
+
+directory_path = f"/Workspace/Repos/{current_user_id}/apj-workshops-2024"
+replace_in_files(directory_path, "catalog.database", f"{catalog}.{database_name}")
+replace_in_files(directory_path, "email_address", current_user_id)
+
+# COMMAND ----------
+
 working_dir = "/".join(os.getcwd().split("/")[0:5])
 git_datasets_location = f"{working_dir}/Datasets/SQL Lab"
 
