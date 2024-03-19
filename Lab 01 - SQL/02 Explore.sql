@@ -1,5 +1,5 @@
 -- Returns all the tables,
-SHOW TABLES;
+SHOW TABLES IN catalog.database;
 
 
 -- Select all the records from the table.
