@@ -5,10 +5,6 @@ CREATE OR REPLACE FUNCTION catalog.database.blue()
 SELECT catalog.database.blue();
 
 
--- Show all user functions.
-SHOW USER FUNCTIONS;
-
-
 -- Create a UDF that encapsulates other functions.
 CREATE OR REPLACE FUNCTION catalog.database.to_hex(x INT)
   RETURN lpad(hex(least(greatest(0, x), 255)), 2, 0);
