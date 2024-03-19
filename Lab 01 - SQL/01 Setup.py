@@ -1,7 +1,5 @@
-# Databricks notebook source
 import os
 
-reset = True
 current_user_id = (
     dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
 )
@@ -9,15 +7,10 @@ datasets_location = f"/FileStore/tmp/{current_user_id}/datasets/"
 catalog = "workshop"
 database_name = current_user_id.split("@")[0].replace(".", "_")
 
-# if reset:
-#     dbutils.fs.rm(datasets_location, True)
-#     spark.sql(f"DROP DATABASE IF EXISTS {database_name} CASCADE")
-#     spark.sql(f"DROP CATALOG IF EXISTS {catalog} CASCADE")
-
-# Create catalog
-spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog};")
-spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
-spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
+# Create catalog (instructor only)
+# spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog};")
+# spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
+# spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
 spark.sql(f"USE CATALOG {catalog};")
 
 # Create database
