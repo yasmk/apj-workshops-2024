@@ -1,3 +1,4 @@
+# Databricks notebook source
 import os
 
 current_user_id = (
