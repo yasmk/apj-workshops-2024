@@ -5,8 +5,8 @@
 
 # COMMAND ----------
 
-%pip install -U langchain==0.1.10 sqlalchemy==2.0.27 pypdf==4.1.0 mlflow==2.11.0 databricks-vectorsearch 
-dbutils.library.restartPython()
+# MAGIC %pip install -U langchain==0.1.10 sqlalchemy==2.0.27 pypdf==4.1.0 mlflow==2.11.0 databricks-vectorsearch 
+# MAGIC dbutils.library.restartPython()
 
 # COMMAND ----------
 
@@ -108,4 +108,64 @@ retrieval_chain.invoke({"chat_history": [],
 # COMMAND ----------
 
 # MAGIC %md ## MLFlow Logging
+# MAGIC We can run an evaluation against the chain and log that to mlflow
 
+# COMMAND ----------
+
+import mlflow
+import pandas as pd
+
+experiment_name = 'workshop_rag_evaluations'
+
+username = spark.sql("SELECT current_user()").first()['current_user()']
+mlflow_dir = f'/Users/{username}/experiment_name'
+mlflow.set_experiment(mlflow_dir)
+
+# COMMAND ----------
+
+eval_questions = [
+    "Can you describe the process of Asymmetric transitivity preserving graph embedding as mentioned in reference [350]?",
+    "What is the main idea behind Halting in random walk kernels as discussed in reference [351]?",
+    "What is the title of the paper authored by Ledig et al. in CVPR, as mentioned in the context information?",
+    'Who are the authors of the paper "Invertible conditional gans for image editing"?',
+    'In which conference was the paper "Generating videos with scene dynamics" presented?',
+    'What is the name of the algorithm developed by Tulyakov et al. for video generation?',
+    'What is the main contribution of the paper "Unsupervised learning of visual representations using videos" by Wang and Gupta?',
+    'What is the title of the paper authored by Wei et al. in CVPR, as mentioned in the context information?',
+    'What is the name of the algorithm developed by Ahsan et al. for video action recognition?',
+    'What is the main contribution of the paper "Learning features by watching objects move" by Pathak et al.?'
+]
+
+sample_questions = pd.DataFrame(
+    eval_questions, columns = ['eval_questions']
+)
+
+# if we have these saved out we can do this
+#sample_questions = spark.sql(f"SELECT * FROM {db_catalog}.{db_schema}.evaluation_questions").toPandas()
+
+# COMMAND ----------
+
+def eval_pipe(inputs):
+    answers = []
+    for index, row in inputs.iterrows():
+        answer = retrieval_chain.invoke({"chat_history": [], 
+                              "input": row.item(), 
+                              "context": ""})
+        
+        # pipe([HumanMessage(content=prompt)], max_tokens=100)
+        # result = pipe( [HumanMessage(content=row.item())], max_tokens=100)
+        # answer = result.content
+        answers.append(answer['answer'])
+    
+    return answers
+
+# COMMAND ----------
+
+with mlflow.start_run(run_name='basic_rag'):
+  results = mlflow.evaluate(eval_pipe, 
+                          data=sample_questions[0:30], 
+                          model_type='text')
+
+# COMMAND ----------
+
+# MAGIC %md We can now look at the evaluation results and see how our RAG has performed

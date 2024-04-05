@@ -66,8 +66,8 @@ docs = chunk_pdf_from_dir(directory=volume_path)
 import pandas as pd
 
 decoded_docs = []
+chunk_id = 0
 for doc in docs:
-  chunk_id = 0
   decoded_docs.append(
     {
       'row_id': f"chunk_{chunk_id}",
