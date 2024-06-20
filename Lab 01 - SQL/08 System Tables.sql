@@ -19,23 +19,23 @@ SELECT
   u.usage_start_time,
   u.usage_end_time,
   u.usage_date,
-  date_format(u.usage_date, 'yyyy-MM') as YearMonth,
+  date_format(u.usage_date, 'yyyy-MM') AS YearMonth,
   u.usage_unit,
   u.usage_quantity,
-  lp.pricing.default as list_price,
-  lp.pricing.default * u.usage_quantity as list_cost,
+  lp.pricing.default AS list_price,
+  lp.pricing.default * u.usage_quantity AS list_cost,
   u.usage_metadata.*
 FROM
   system.billing.usage u
-  JOIN system.billing.list_prices lp on u.cloud = lp.cloud
+  JOIN system.billing.list_prices lp ON u.cloud = lp.cloud
   AND u.sku_name = lp.sku_name
   AND u.usage_start_time >= lp.price_start_time
   AND (
     u.usage_end_time <= lp.price_end_time
-    OR lp.price_end_time is null
+    OR lp.price_end_time IS NULL
   )
 WHERE
-  usage_metadata.job_id is not null;
+  usage_metadata.job_id IS NOT NULL;
 
 
 -- Review all entities accessing your table (workflows, notebook, DLT, DBSQL...)
