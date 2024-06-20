@@ -40,7 +40,7 @@ def replace_in_files(directory, old_word, new_word):
                 print(f"Updated file: {file_path}")
 
 
-directory_path = f"/Workspace/Repos/{current_user_id}/apj-workshops-2024"
+directory_path = f"/Workspace/Users/{current_user_id}/apj-workshops-2024"
 replace_in_files(directory_path, "catalog.database", f"{catalog}.{database_name}")
 replace_in_files(directory_path, "email_address", current_user_id)
 
