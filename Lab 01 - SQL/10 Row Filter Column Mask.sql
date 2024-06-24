@@ -1,5 +1,9 @@
 /*
  * Row Filters
+ *
+ * Row filters allow you to apply a filter to a table so that queries return
+ * only rows that meet the filter criteria. You implement a row filter as a SQL 
+ * user-defined function (UDF).
  */
 
 -- Create a function to filter on stores.
@@ -31,11 +35,15 @@ DROP
 
 /*
  * Column Masks
+ * 
+ * Column masks let you apply a masking function to a table column. 
+ * The masking function evaluates at query runtime, substituting each 
+ * reference of the target column with the results of the masking function. 
+ * For most use cases, column masks determine whether to return the original 
+ * column value or redact it based on the identity of the invoking user.
  */
 
--- Create a function to mask names.
--- The function evaluates if the user is part of the 'admins' group,
--- if they are, it returns all values, if they are not, it executes the mask.
+-- Create two functions to mask name and email.
 CREATE OR REPLACE FUNCTION
   catalog.database.name_mask(name STRING)
 RETURN
