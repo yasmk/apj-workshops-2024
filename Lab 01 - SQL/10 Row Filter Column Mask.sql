@@ -8,7 +8,7 @@
 CREATE OR REPLACE FUNCTION
   catalog.database.mel_stores_filter(store_id STRING) 
 RETURN
-  CASE WHEN is_member('admins') THEN true ELSE store_id like 'MEL0%' END
+  CASE WHEN is_member('admins') THEN true ELSE store_id like 'MEL0%' END;
 
 
 -- Add filter to table.
@@ -36,19 +36,31 @@ DROP
 -- Create a function to mask names.
 -- The function evaluates if the user is part of the 'admins' group,
 -- if they are, it returns all values, if they are not, it executes the mask.
-CREATE FUNCTION
+CREATE OR REPLACE FUNCTION
   catalog.database.name_mask(name STRING)
 RETURN
-  CASE WHEN is_member('admins') THEN name ELSE '****' END;
+  CASE WHEN is_member('admins') THEN name ELSE '***** *****' END;
+
+CREATE OR REPLACE FUNCTION
+  catalog.database.email_mask(email STRING)
+RETURN
+  CASE WHEN is_member('admins') THEN email ELSE regexp_replace(email, '(.*)@', '') END;
 
 
--- Add mask to table.
+-- Add masks to table.
 ALTER TABLE
   catalog.database.dim_customer
 ALTER COLUMN 
   name
 SET MASK
   catalog.database.name_mask;
+
+ALTER TABLE
+  catalog.database.dim_customer
+ALTER COLUMN 
+  email
+SET MASK
+  catalog.database.email_mask;
 
 
 -- Select from table. All names should be masked.
