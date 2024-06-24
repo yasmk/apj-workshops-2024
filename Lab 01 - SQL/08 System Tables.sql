@@ -19,7 +19,7 @@ SELECT
   u.usage_start_time,
   u.usage_end_time,
   u.usage_date,
-  date_format(u.usage_date, 'yyyy-MM') AS YearMonth,
+  date_format(u.usage_date, 'yyyy-MM') AS year_month,
   u.usage_unit,
   u.usage_quantity,
   lp.pricing.default AS list_price,
@@ -27,13 +27,11 @@ SELECT
   u.usage_metadata.*
 FROM
   system.billing.usage u
-  JOIN system.billing.list_prices lp ON u.cloud = lp.cloud
+JOIN system.billing.list_prices lp
+  ON u.cloud = lp.cloud
   AND u.sku_name = lp.sku_name
   AND u.usage_start_time >= lp.price_start_time
-  AND (
-    u.usage_end_time <= lp.price_end_time
-    OR lp.price_end_time IS NULL
-  )
+  AND (u.usage_end_time <= lp.price_end_time OR lp.price_end_time IS NULL)
 WHERE
   usage_metadata.job_id IS NOT NULL;
 
@@ -56,21 +54,21 @@ FROM
 
 
 -- Display who's accessed a particuluar table the most.
--- SELECT
---   user_identity.email,
---   count(*)
--- FROM
---   system.operational_data.audit_logs
--- WHERE
---   request_params.table_full_name = "catalog.database.fact_apj_sales"
---   AND service_name = "unityCatalog"
---   AND action_name = "generateTemporaryTableCredential"
--- GROUP BY
---   1
--- ORDER BY
---   2 DESC
--- LIMIT
---   1;
+SELECT
+  user_identity.email,
+  count(*) AS count
+FROM
+  system.access.audit
+WHERE
+  request_params.table_full_name = "catalog.database.fact_apj_sales"
+  AND service_name = "unityCatalog"
+  AND action_name = "generateTemporaryTableCredential"
+GROUP BY
+  1
+ORDER BY
+  2 DESC
+LIMIT
+  1;
 
 
 -- Display what tables a particuluar user has access within the last 24 hours.
