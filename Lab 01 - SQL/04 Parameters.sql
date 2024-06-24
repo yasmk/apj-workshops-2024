@@ -1,8 +1,10 @@
--- Create a query called "city_list" from the following
+Databricks notebook source
+-- DBTITLE 1,Create a query called "city_list" from the following
 SELECT DISTINCT city FROM catalog.database.dim_locations;
 
+-- COMMAND ----------
 
--- Get sales by store and city
+-- DBTITLE 1,Get sales by store and city
 SELECT
   locations.name AS store,
   locations.city AS city,
@@ -16,8 +18,9 @@ FROM
 GROUP BY
   ALL;
 
+-- COMMAND ----------
 
--- Create a filter for city
+-- DBTITLE 1,Create a filter for city
 SELECT
   locations.name AS store,
   locations.city AS city,
