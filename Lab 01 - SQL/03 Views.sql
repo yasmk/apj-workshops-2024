@@ -37,6 +37,16 @@ SELECT * FROM catalog.database.vw_sales_cost_location;
 -- Describe the view
 DESCRIBE EXTENDED catalog.database.vw_sales_cost_location;
 
+/*
+ * In Databricks SQL, materialized views are Unity Catalog managed 
+ * tables that allow users to precompute results based on the latest 
+ * version of data in source tables. Materialized views on Databricks 
+ * differ from other implementations as the results returned reflect 
+ * the state of data when the materialized view was last refreshed 
+ * rather than always updating results when the materialized view is queried. 
+ * You can manually refresh materialized views or schedule refreshes.
+ */
+
 
 -- Create a materialized view of the above Select statement
 CREATE MATERIALIZED VIEW IF NOT EXISTS catalog.database.mv_sales_cost_location AS

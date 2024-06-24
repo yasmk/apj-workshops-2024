@@ -1,3 +1,9 @@
+/*
+ * System tables are a Databricks-hosted analytical store 
+ * of your account’s operational data found in the system catalog. 
+ * System tables can be used for historical observability across your account.
+ */
+
 -- Select all billing data
 SELECT * FROM system.billing.usage limit 10;
 

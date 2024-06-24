@@ -1,3 +1,11 @@
+/*
+ * A user-defined function (UDF) is a function defined by a user, 
+ * allowing custom logic to be reused in the user environment. 
+ * Databricks has support for many different types of UDFs to allow 
+ * for distributing extensible logic. This article introduces some of 
+ * the general strengths and limitations of UDFs.
+ */
+
 -- Create a UDF that returns a literal.
 CREATE OR REPLACE FUNCTION catalog.database.blue()
   RETURN '0000FF';
