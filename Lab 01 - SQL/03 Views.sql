@@ -1,4 +1,4 @@
--- Databrick notebook source
+-- Databricks notebook source
 -- DBTITLE 1,Select all records from the fact table and join it with the 'items' and 'locations' dimensions
 SELECT
   sales.ts::timestamp as date,
