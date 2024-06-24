@@ -1,5 +1,15 @@
+-- Select from table. You should see all names and email addresses.
+SELECT * FROM catalog.database.dim_customer;
+
+
 /*
  * Row Filters
+ * 
+ * Row filters allow you to apply a filter to a table so that queries return only rows that meet the filter criteria.
+ * You implement a row filter as a SQL user-defined function (UDF). 
+ * Python and Scala UDFs are also supported, but only when they are wrapped in SQL UDFs.
+ *
+ * More at https://docs.databricks.com/en/data-governance/unity-catalog/row-and-column-filters.html#what-are-row-filters
  */
 
 -- Create a function to filter on stores.
@@ -31,6 +41,13 @@ DROP
 
 /*
  * Column Masks
+ *
+ * Column masks let you apply a masking function to a table column. The masking function evaluates at query runtime, 
+ * substituting each reference of the target column with the results of the masking function. 
+ * For most use cases, column masks determine whether to return the original column value or redact it based on the 
+ * identity of the invoking user. Column masks are expressions written as SQL UDFs or as Python or Scala UDFs that are wrapped in SQL UDFs.
+ *
+ * More at https://docs.databricks.com/en/data-governance/unity-catalog/row-and-column-filters.html#what-are-column-masks
  */
 
 -- Create a function to mask names.
