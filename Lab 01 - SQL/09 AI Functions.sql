@@ -4,7 +4,7 @@
 
 SELECT
   ai_query(
-    'databricks-mixtral-8x7b-instruct',
+    'databricks-dbrx-instruct',
     'What is Databricks?'
   );
 
