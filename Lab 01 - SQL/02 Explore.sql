@@ -56,3 +56,7 @@ SHOW TABLES DROPPED in catalog.database;
 
 -- Undrop table.
 UNDROP TABLE catalog.database.store_data_json;
+
+
+-- Select all the records from the table.
+SELECT * FROM catalog.database.fact_apj_sales;
