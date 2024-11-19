@@ -1,20 +1,19 @@
 # Databricks notebook source
 import os
 
+# Get the current user's ID
 current_user_id = (
     dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
 )
-datasets_location = f"/FileStore/tmp/{current_user_id}/datasets/"
-catalog = "workshop"
-database_name = current_user_id.split("@")[0].replace(".", "_")
 
-# Create catalog (instructor only)
-# spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog};")
-# spark.sql(f"GRANT USE CATALOG ON CATALOG {catalog} to `{current_user_id}`")
-# spark.sql(f"GRANT CREATE SCHEMA ON CATALOG {catalog} to `{current_user_id}`")
+# Define catalog and database name based on user ID
+catalog = "workshop"
+database_name = current_user_id.split("@")[0].replace(".", "_").replace("+", "_")
+
+# Use the specified catalog, needs to be created first
 spark.sql(f"USE CATALOG {catalog};")
 
-# Create database
+# Create and use the database for the current user
 spark.sql(f"CREATE DATABASE IF NOT EXISTS {database_name};")
 spark.sql(f"USE {database_name}")
 
@@ -46,199 +45,122 @@ replace_in_files(directory_path, "email_address", current_user_id)
 
 # COMMAND ----------
 
-working_dir = "/".join(os.getcwd().split("/")[0:5])
-git_datasets_location = f"{working_dir}/Datasets/SQL Lab"
-
-sample_datasets = [
-    "dim_customer",
-    "dim_locations",
-    "dim_products",
-    "fact_apj_sale_items",
-    "fact_apj_sales",
-]
-for sample_data in sample_datasets:
-    dbutils.fs.rm(f"{datasets_location}/SQL_Lab/{sample_data}.csv.gz")
-    dbutils.fs.cp(
-        f"file:{git_datasets_location}/{sample_data}.csv.gz",
-        f"{datasets_location}/SQL_Lab/{sample_data}.csv.gz",
-    )
+# DBTITLE 1,Create dim_customer
+# MAGIC %sql
+# MAGIC CREATE TABLE dim_customer (
+# MAGIC   unique_id VARCHAR(50) NOT NULL,
+# MAGIC   pk INT NOT NULL,
+# MAGIC   id INT NOT NULL,
+# MAGIC   store_id VARCHAR(50) NOT NULL,
+# MAGIC   name VARCHAR(255),
+# MAGIC   email VARCHAR(255),
+# MAGIC   PRIMARY KEY (unique_id)
+# MAGIC );
 
 # COMMAND ----------
 
-dbutils.fs.ls(f"{datasets_location}/SQL_Lab/")
-
+# DBTITLE 1,Create dim_locations
+# MAGIC %sql
+# MAGIC CREATE TABLE dim_locations (
+# MAGIC   id VARCHAR(50) NOT NULL,
+# MAGIC   pk INT NOT NULL,
+# MAGIC   name VARCHAR(255),
+# MAGIC   email VARCHAR(255),
+# MAGIC   city VARCHAR(100),
+# MAGIC   hq VARCHAR(255),
+# MAGIC   phone_number VARCHAR(50),
+# MAGIC   country_code VARCHAR(10),
+# MAGIC   PRIMARY KEY (id)
+# MAGIC );
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ###GET the DATABASE NAME below
-# MAGIC You should use this throughout the lab
+# DBTITLE 1,Create dim_products
+# MAGIC %sql
+# MAGIC CREATE TABLE dim_products (
+# MAGIC   product_skey INT NOT NULL,
+# MAGIC   id VARCHAR(255) NOT NULL,
+# MAGIC   ingredients STRING,
+# MAGIC   name VARCHAR(255),
+# MAGIC   current_record CHAR(1),
+# MAGIC   start_date TIMESTAMP,
+# MAGIC   end_date TIMESTAMP,
+# MAGIC   PRIMARY KEY (id)
+# MAGIC );
 
 # COMMAND ----------
 
-print(f"Use this catalog.database name through out the lab: {catalog}.{database_name}")
-
-# COMMAND ----------
-
-table_name = "dim_customer"
-sample_file = f"{table_name}.csv.gz"
-spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
-spark.conf.set("table.name", table_name)
+# DBTITLE 1,Create fact_apj_sale_items
+# MAGIC %sql
+# MAGIC CREATE TABLE fact_apj_sale_items (
+# MAGIC     sale_id VARCHAR(255) NOT NULL,
+# MAGIC     product_id VARCHAR(255),
+# MAGIC     store_id VARCHAR(50),
+# MAGIC     product_size VARCHAR(50),
+# MAGIC     product_cost DECIMAL(10, 2),
+# MAGIC     product_ingredients STRING,
+# MAGIC     product_skey INT,
+# MAGIC     slocation_skey INT,
+# MAGIC     unique_customer_id VARCHAR(255),
+# MAGIC     PRIMARY KEY (sale_id),
+# MAGIC     FOREIGN KEY (unique_customer_id) REFERENCES dim_customer(unique_id),
+# MAGIC     FOREIGN KEY (store_id) REFERENCES dim_locations(id)
+# MAGIC );
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
-# MAGIC
-# MAGIC COPY INTO `${table.name}`
-# MAGIC FROM
-# MAGIC   (
-# MAGIC     SELECT
-# MAGIC       *
-# MAGIC     FROM
-# MAGIC       '${sampledata.path}'
-# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
-# MAGIC     'mergeSchema' = 'true',
-# MAGIC     'delimiter' = ',',
-# MAGIC     'header' = 'true',
-# MAGIC     'quote' = "'"
-# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC SELECT
-# MAGIC   *
-# MAGIC FROM
-# MAGIC   `${table.name}`;
+# MAGIC CREATE TABLE fact_apj_sales (
+# MAGIC     sale_id STRING,
+# MAGIC     ts TIMESTAMP,
+# MAGIC     order_source STRING,
+# MAGIC     order_state STRING,
+# MAGIC     unique_customer_id STRING,
+# MAGIC     store_id STRING,
+# MAGIC     customer_skey INT,
+# MAGIC     slocation_skey INT,
+# MAGIC     PRIMARY KEY (sale_id),
+# MAGIC     FOREIGN KEY (unique_customer_id) REFERENCES dim_customer(unique_id)
+# MAGIC )
 
 # COMMAND ----------
 
-table_name = "dim_locations"
-sample_file = f"{table_name}.csv.gz"
-spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
-spark.conf.set("table.name", table_name)
+
+# DBTITLE 1,Define read file function
+def read_file_contents(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        return file.read()
+
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
-# MAGIC
-# MAGIC COPY INTO `${table.name}`
-# MAGIC FROM
-# MAGIC   (
-# MAGIC     SELECT
-# MAGIC       *
-# MAGIC     FROM
-# MAGIC       '${sampledata.path}'
-# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
-# MAGIC     'mergeSchema' = 'true',
-# MAGIC     'delimiter' = ',',
-# MAGIC     'header' = 'true',
-# MAGIC     'quote' = "'"
-# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC SELECT
-# MAGIC   *
-# MAGIC FROM
-# MAGIC   `${table.name}`;
+# DBTITLE 1,Insert dim_customer
+spark.sql(read_file_contents("../Datasets/SQL Lab/dim_customer.sql"))
 
 # COMMAND ----------
 
-table_name = "dim_products"
-sample_file = f"{table_name}.csv.gz"
-spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
-spark.conf.set("table.name", table_name)
+# DBTITLE 1,Insert dim_locations
+spark.sql(read_file_contents("../Datasets/SQL Lab/dim_locations.sql"))
+
+# COMMAND ----------
+
+# DBTITLE 1,Insert dim_products
+spark.sql(read_file_contents("../Datasets/SQL Lab/dim_products.sql"))
+
+# COMMAND ----------
+
+# DBTITLE 1,Insert fact_apj_sales
+spark.sql(read_file_contents("../Datasets/SQL Lab/fact_apj_sales.sql"))
+
+# COMMAND ----------
+
+# DBTITLE 1,Insert fact_apj_sale_items
+spark.sql(read_file_contents("../Datasets/SQL Lab/fact_apj_sale_items.sql"))
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
-# MAGIC
-# MAGIC COPY INTO `${table.name}`
-# MAGIC FROM
-# MAGIC   (
-# MAGIC     SELECT
-# MAGIC       *
-# MAGIC     FROM
-# MAGIC       '${sampledata.path}'
-# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
-# MAGIC     'mergeSchema' = 'true',
-# MAGIC     'delimiter' = ',',
-# MAGIC     'header' = 'true',
-# MAGIC     'quote' = "'"
-# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC SELECT
-# MAGIC   *
-# MAGIC FROM
-# MAGIC   `${table.name}`;
-
-# COMMAND ----------
-
-table_name = "fact_apj_sales"
-sample_file = f"{table_name}.csv.gz"
-spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
-spark.conf.set("table.name", table_name)
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
-# MAGIC
-# MAGIC COPY INTO `${table.name}`
-# MAGIC FROM
-# MAGIC   (
-# MAGIC     SELECT
-# MAGIC       *
-# MAGIC     FROM
-# MAGIC       '${sampledata.path}'
-# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
-# MAGIC     'mergeSchema' = 'true',
-# MAGIC     'delimiter' = ',',
-# MAGIC     'header' = 'true',
-# MAGIC     'quote' = "'"
-# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC SELECT
-# MAGIC   *
-# MAGIC FROM
-# MAGIC   `${table.name}`;
-
-# COMMAND ----------
-
-table_name = "fact_apj_sale_items"
-sample_file = f"{table_name}.csv.gz"
-spark.conf.set("sampledata.path", f"dbfs:{datasets_location}SQL_Lab/{sample_file}")
-spark.conf.set("table.name", table_name)
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS `${table.name}`;
-# MAGIC CREATE TABLE IF NOT EXISTS `${table.name}`;
-# MAGIC
-# MAGIC COPY INTO `${table.name}`
-# MAGIC FROM
-# MAGIC   (
-# MAGIC     SELECT
-# MAGIC       *
-# MAGIC     FROM
-# MAGIC       '${sampledata.path}'
-# MAGIC   ) FILEFORMAT = CSV FORMAT_OPTIONS (
-# MAGIC     'mergeSchema' = 'true',
-# MAGIC     'delimiter' = ',',
-# MAGIC     'header' = 'true',
-# MAGIC     'quote' = "'"
-# MAGIC   ) COPY_OPTIONS ('mergeSchema' = 'true');
-# MAGIC SELECT
-# MAGIC   *
-# MAGIC FROM
-# MAGIC   `${table.name}`;
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC /*store_data, json*/
-# MAGIC CREATE
-# MAGIC OR REPLACE TABLE store_data_json AS
+# MAGIC CREATE OR REPLACE TABLE store_data_json AS
 # MAGIC SELECT
 # MAGIC   1 AS id,
 # MAGIC   '{
@@ -287,11 +209,3 @@ spark.conf.set("table.name", table_name)
 # MAGIC     "zip code":"94025",
 # MAGIC     "fb:testid":"1234"
 # MAGIC  }' as raw;
-# MAGIC SELECT
-# MAGIC   *
-# MAGIC FROM
-# MAGIC   store_data_json;
-
-# COMMAND ----------
-
-print(f"Use this catalog.database name through out the lab: {catalog}.{database_name}")
