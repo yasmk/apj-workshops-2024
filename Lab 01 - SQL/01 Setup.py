@@ -10,7 +10,7 @@ current_user_id = (
 catalog = "workshop"
 database_name = current_user_id.split("@")[0].replace(".", "_").replace("+", "_")
 
-# Use the specified catalog
+# Use the specified catalog, needs to be created first
 spark.sql(f"USE CATALOG {catalog};")
 
 # Create and use the database for the current user
