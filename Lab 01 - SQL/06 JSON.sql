@@ -18,5 +18,9 @@ SELECT raw:owner, raw:`fb:testid`, raw:`zip code` FROM catalog.database.store_da
 SELECT raw:store.fruit[0], raw:store.fruit[1] FROM catalog.database.store_data_json;
 
 
--- Extract subfields from arrays
-SELECT raw:store.book[*].isbn FROM catalog.database.store_data_json;
+-- Flatten variant objects and arrays
+SELECT
+  key, value 
+FROM 
+  catalog.database.store_data_json, 
+  LATERAL variant_explode(catalog.database.store_data_json.raw:store);
